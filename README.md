@@ -2,6 +2,9 @@
 
 本目錄收錄體能訓練週期課表管理系統（Training Cycle Platform）的系統分析（SA）工作紀錄，從接到需求一路到結案的過程文件。
 
+若想快速了解專案背景、解決的問題與畫面截圖，可參考另一個專案簡介 Repo：[training-cycle-platform](https://github.com/FangChenYi/training-cycle-platform)。<br/>
+本 Repo 則聚焦在需求、分析、設計、規格與治理等系統分析文件。
+
 ---
 
 ## 工作流程
@@ -70,5 +73,3 @@ flowchart LR
 ---
 
 下一份：[01. 需求 (Requirements)](docs/01-requirements.md)
-
-# training-cycle-platform-specs
