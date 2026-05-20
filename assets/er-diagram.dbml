@@ -1,0 +1,166 @@
+Table users {
+  id int [pk, increment, note: 'ASP.NET Identity AppUser']
+  email varchar [unique]
+  user_name varchar
+  password_hash varchar
+  full_name varchar
+  vald_profile_id varchar [note: '對齊 VALD profileId（非 FK）']
+  vald_group_id varchar
+  given_name varchar
+  family_name varchar
+  date_of_birth timestamp
+  sex varchar [note: 'Male / Female / Unknown']
+  status int [note: '1=Active, 0=Disabled']
+  last_login_at timestamp
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table training_cycles {
+  id int [pk, increment]
+  user_id int [note: 'NULL=模板, 有值=學員專屬副本']
+  name varchar(100) [not null]
+  section_type int [not null, note: '0=Other,1=WarmUp,2=Mobility,3=Core,4=Conditioning,5=Strength,6=SmallMuscle,7=Skill']
+  start_date date [not null]
+  end_date date [not null]
+
+  Indexes {
+    (section_type, name) [name: 'IX_training_cycles_section_name']
+  }
+}
+
+Table training_cycle_weeks {
+  id int [pk, increment]
+  training_cycle_id int [not null]
+  name varchar(100)
+  week_number int [not null, note: '0 = 固定課表']
+
+  Indexes {
+    (training_cycle_id, week_number) [unique, name: 'UX_training_cycle_weeks_cycleid_weeknumber']
+  }
+}
+
+Table training_exercise_groups {
+  id int [pk, increment]
+  training_cycle_week_id int [not null]
+  name varchar(50)
+  order_index int [not null]
+  rounds int
+  rest_between_rounds_seconds int
+
+  Indexes {
+    (training_cycle_week_id, order_index) [unique, name: 'IX_training_exercise_groups_cycleweekid_order']
+  }
+}
+
+Table training_exercise_items {
+  id int [pk, increment]
+  exercise_group_id int [not null]
+  exercise_id int [note: 'nullable; Exercise 刪除時 SetNull']
+  name varchar [not null, note: '保留歷史名稱，不隨 Exercise 一起消失']
+  sets int
+  reps int
+  seconds int
+  intensity varchar(100)
+  notes varchar(1000)
+  order_index int [not null]
+
+  Indexes {
+    exercise_id [name: 'IX_training_exercise_items_exerciseid']
+    (exercise_group_id, order_index) [unique, name: 'IX_training_exercise_items_groupid_order']
+  }
+}
+
+Table training_exercises {
+  id int [pk, increment]
+  name varchar(200) [not null, unique]
+  primary_muscle_group varchar(100)
+  equipment varchar(100)
+  section_type int [not null]
+  video_url varchar(500)
+  description varchar(2000)
+  status int [not null, default: 1, note: '1=Active (default), 0=Disabled']
+}
+
+Table athlete_schedules {
+  id int [pk, increment]
+  user_id int [not null]
+  training_cycle_id int [not null]
+  training_cycle_week_id int [not null]
+  date date [not null]
+  sort_order int [not null]
+
+  Indexes {
+    (user_id, date) [name: 'IX_athlete_schedules_userid_date']
+    (user_id, date, sort_order) [name: 'IX_athlete_schedules_userid_date_order']
+    (user_id, date, training_cycle_id, training_cycle_week_id) [unique, name: 'UX_athlete_schedules_unique_assignment']
+  }
+}
+
+Table vald_test_metric_records {
+  id bigint [pk, increment]
+  profile_id varchar(64) [not null, note: '對齊 users.vald_profile_id（無 FK）']
+  test_id varchar(64) [not null]
+  test_type varchar(32) [not null, note: 'SJ / CMJ / IMTP / HJ']
+  recorded_date_utc timestamptz [not null]
+  modified_date_utc timestamptz [not null]
+  weight decimal
+  synced_at_utc timestamptz [not null]
+  definition_result varchar(64) [not null]
+  average_value float [not null]
+  max_value float [not null]
+
+  Indexes {
+    (test_id, definition_result) [unique, name: 'UX_vald_test_metric_test_def']
+    (profile_id, recorded_date_utc) [name: 'IX_vald_test_metric_profile_recorded']
+  }
+}
+
+Table athlete_running_data {
+  id int [pk, increment]
+  user_id int [not null]
+  recorded_date date [not null]
+  speed_60m decimal
+  speed_40m decimal
+  speed_30m decimal
+  vo2_max_6min decimal
+
+  Indexes {
+    (user_id, recorded_date) [unique, name: 'UX_athlete_running_data_userid_recordeddate']
+  }
+}
+
+Table athlete_running_best {
+  user_id int [pk, note: '一人一筆，以 user_id 為 PK']
+  best_60m decimal
+  best_40m decimal
+  best_30m decimal
+  best_vo2_max decimal
+}
+
+Table refresh_tokens {
+  id int [pk, increment]
+  user_id int [not null]
+  token varchar(256) [not null, unique]
+  expires_at timestamp [not null]
+  created_at timestamp [not null]
+  is_revoked boolean [not null, default: false]
+
+  Indexes {
+    user_id [name: 'IX_refresh_tokens_userid']
+  }
+}
+
+// === Refs ===
+Ref: training_cycles.user_id > users.id [delete: set null]
+Ref: training_cycle_weeks.training_cycle_id > training_cycles.id [delete: cascade]
+Ref: training_exercise_groups.training_cycle_week_id > training_cycle_weeks.id [delete: cascade]
+Ref: training_exercise_items.exercise_group_id > training_exercise_groups.id [delete: cascade]
+Ref: training_exercise_items.exercise_id > training_exercises.id [delete: set null]
+Ref: athlete_schedules.training_cycle_id > training_cycles.id [delete: cascade]
+Ref: athlete_schedules.training_cycle_week_id > training_cycle_weeks.id [delete: cascade]
+
+Ref: athlete_schedules.user_id > users.id
+Ref: athlete_running_data.user_id > users.id
+Ref: athlete_running_best.user_id > users.id
+Ref: refresh_tokens.user_id > users.id
