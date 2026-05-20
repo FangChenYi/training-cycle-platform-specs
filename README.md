@@ -18,11 +18,11 @@ flowchart LR
     G["<b>05 治理</b><br/>評審 · Baseline<br/>變更 · UAT · 結案"]
     R --> A --> D --> S --> G --> End([結案 / 維運])
 
-    click R "docs/01-requirements.md" "進入 01 需求"
-    click A "docs/02-analysis.md" "進入 02 分析"
-    click D "docs/03-design.md" "進入 03 設計"
-    click S "docs/04-specification.md" "進入 04 規格"
-    click G "docs/05-governance.md" "進入 05 治理"
+    click R "https://github.com/FangChenYi/training-cycle-platform-specs/blob/main/docs/01-requirements.md" "進入 01 需求"
+    click A "https://github.com/FangChenYi/training-cycle-platform-specs/blob/main/docs/02-analysis.md" "進入 02 分析"
+    click D "https://github.com/FangChenYi/training-cycle-platform-specs/blob/main/docs/03-design.md" "進入 03 設計"
+    click S "https://github.com/FangChenYi/training-cycle-platform-specs/blob/main/docs/04-specification.md" "進入 04 規格"
+    click G "https://github.com/FangChenYi/training-cycle-platform-specs/blob/main/docs/05-governance.md" "進入 05 治理"
 
     classDef doc1 fill:#E8F1FF,stroke:#5B8DEF,color:#1F3A68;
     classDef doc2 fill:#EAF6EE,stroke:#4CAF7A,color:#1F4D34;
