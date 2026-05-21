@@ -5,6 +5,13 @@
 若想快速了解專案背景、解決的問題與畫面截圖，可參考另一個專案簡介 Repo：[training-cycle-platform](https://github.com/FangChenYi/training-cycle-platform)。<br/>
 本 Repo 則聚焦在需求、分析、設計、規格與治理等系統分析文件。
 
+## 目錄
+
+- [工作流程](#工作流程)
+- [文件導引](#文件導引)
+- [系統簡介](#系統簡介)
+- [技術棧](#技術棧)
+
 ---
 
 ## 工作流程

@@ -2,6 +2,21 @@
 
 本文件將 [03-design.md](03-design.md) 的設計骨架轉成可實作的規格。第一版聚焦在影響最深的三條核心：教練建立 / 更新學員課表、VALD Profile 同步、VALD 檢測同步；其餘 Use Case 已在 [03-design.md § Use Case 與 API 對照](03-design.md#use-case-與-api-對照) 列出 API 與授權，本文件不再展開敘事細節。
 
+## 目錄
+
+- [4.1 功能規格 FSD](#41-功能規格-fsd)
+  - [FSD-01 教練建立 / 更新學員課表](#fsd-01-教練建立--更新學員課表)
+  - [FSD-02 VALD Profile 同步](#fsd-02-vald-profile-同步)
+  - [FSD-03 VALD 檢測同步](#fsd-03-vald-檢測同步)
+- [4.2 非功能規格 NFR](#42-非功能規格-nfr)
+- [4.3 介面契約](#43-介面契約)
+  - [共通規則](#共通規則)
+  - [端點 1：課表整批建立 / 更新](#contract-create-full-cycle)
+  - [端點 2：同步 VALD Profile](#contract-sync-profiles)
+  - [端點 3：增量同步 VALD 檢測](#contract-sync-tests)
+- [4.4 需求追溯矩陣 RTM](#44-需求追溯矩陣-rtm)
+- [小結](#小結)
+
 ---
 
 ## 4.1 功能規格 FSD
